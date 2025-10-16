@@ -36,6 +36,15 @@ jobs:
         working-directory: myoassist
         run: python test_setup.py
 
+      - name: Run setup test
+        working-directory: myoassist
+        run: |
+          pip3 install jupyter ipykernel tabulate matplotlib h5py
+          python3 -m ipykernel install --user --name=$CONDA_DEFAULT_ENV
+          jupyter nbconvert --to notebook --execute "./docs/tutorial/rl_imitation_tutorial.ipynb" --ExecutePreprocessor.kernel_name=$CONDA_DEFAULT_ENV
+          jupyter nbconvert --to notebook --execute "./docs/tutorial/rl_analyze_tutorial.ipynb" --ExecutePreprocessor.kernel_name=$CONDA_DEFAULT_ENV
+
+
       - name: Run RL policy evaluation
         working-directory: myoassist
         run: python rl_train/run_policy_eval.py docs/assets/tutorial_rl_models/train_session_20250729-005528_tutorial_full_obs
